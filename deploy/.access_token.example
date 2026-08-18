@@ -1,0 +1,4 @@
+在此文件填入你的访问口令，例如：
+echo "你的口令" > deploy/.access_token
+
+注意：.access_token 已被 .gitignore 排除，不会提交到仓库。

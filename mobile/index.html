@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="premium-black">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#060708">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DeepSeek">
+<title>DeepSeek · 手机工作媒介</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css?v=20260818c">
+</head>
+<body>
+  <div class="app" id="app">
+
+    <!-- 鲸鱼娘背景层（可开关） -->
+    <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
+
+    <!-- 花边装饰层（可开关） -->
+    <div class="flourish" id="flourish" aria-hidden="true">
+      <img class="flourish-img flourish-crest" src="assets/maid-bottom-crest-v1.webp" alt="">
+      <img class="flourish-img flourish-corner-tl" src="assets/maid-sidebar-corner-v1.webp" alt="">
+      <img class="flourish-img flourish-corner-br" src="assets/maid-workspace-shield-v2.webp" alt="">
+    </div>
+
+    <!-- 顶部栏：左上角菜单 + DeepSeek 品牌 -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="菜单" title="菜单">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>
+        </button>
+        <span class="logo" id="logoMark" aria-hidden="true">
+          <img src="assets/avatar.png" alt="">
+        </span>
+        <div class="topbar-title">
+          <span class="title-main">DeepSeek</span>
+          <span class="title-sub" id="connState">连接中…</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="newSessionBtn" aria-label="新会话" title="新会话">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 左侧抽屉导航（对话/历史/文件/设置统一入口） -->
+    <div class="drawer" id="drawer" aria-hidden="true">
+      <div class="drawer-mask" id="drawerMask"></div>
+      <div class="drawer-sheet">
+        <div class="drawer-head">
+          <span class="drawer-logo" aria-hidden="true">
+            <img src="assets/avatar.png" alt="">
+          </span>
+          <div class="drawer-head-text">
+            <div class="drawer-name">DeepSeek</div>
+            <div class="drawer-sub">手机工作媒介</div>
+          </div>
+        </div>
+        <nav class="drawer-nav" id="drawerNav">
+          <button class="drawer-item active" data-tab="chat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l2.2-3.7A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+            <span>对话</span>
+          </button>
+          <button class="drawer-item" data-tab="sessions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.8"/></svg>
+            <span>历史</span>
+          </button>
+          <button class="drawer-item" data-tab="files">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg>
+            <span>文件</span>
+          </button>
+          <button class="drawer-item" data-tab="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"/></svg>
+            <span>设置</span>
+          </button>
+        </nav>
+        <div class="drawer-foot">
+          <span>DeepSeek Harness</span>
+          <span>内外网 · Zerotier</span>
+        </div>
+        <img class="drawer-corner" src="assets/maid-workspace-ribbon-v2.webp" alt="" aria-hidden="true">
+      </div>
+    </div>
+
+    <!-- 内容区 -->
+    <main class="content">
+      <!-- 对话 Tab -->
+      <section class="tab-panel active" id="panel-chat">
+        <div class="chat-scroll" id="chatScroll">
+          <div class="chat-list" id="chatList">
+            <div class="welcome" id="welcome">
+              <div class="welcome-badge" aria-hidden="true">
+                <img src="assets/avatar.png" alt="">
+              </div>
+              <div class="welcome-text">大肥鲸摸鱼呢~有啥事快讲 (๑´ㅂ`๑)</div>
+              <div class="recent-bar" id="recentBar" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.8"/></svg>
+                <span class="recent-title" id="recentTitle">最近对话</span>
+                <span class="recent-time" id="recentTime"></span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="composer">
+          <button class="composer-btn" id="attachBtn" aria-label="上传文件">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <textarea class="composer-input" id="input" rows="1" placeholder="输入消息…" enterkeyhint="send"></textarea>
+          <button class="composer-send" id="sendBtn" aria-label="发送">发送</button>
+        </div>
+        <input type="file" id="fileInput" hidden multiple>
+      </section>
+
+      <!-- 会话历史 Tab -->
+      <section class="tab-panel" id="panel-sessions">
+        <div class="panel-head">
+          <span class="panel-title">近期对话</span>
+          <button class="link-btn" id="refreshSessions">刷新</button>
+        </div>
+        <div class="list" id="sessionList"></div>
+      </section>
+
+      <!-- 文件 Tab（树形，与实体机工作目录同步） -->
+      <section class="tab-panel" id="panel-files">
+        <div class="panel-head">
+          <span class="panel-title">工作成果</span>
+          <div class="panel-actions">
+            <button class="upload-btn" id="uploadBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              上传
+            </button>
+            <button class="link-btn" id="refreshFiles">刷新</button>
+          </div>
+        </div>
+        <div class="list" id="fileList"></div>
+        <input type="file" id="folderFileInput" hidden multiple>
+      </section>
+
+      <!-- 设置 Tab -->
+      <section class="tab-panel" id="panel-settings">
+        <div class="panel-head"><span class="panel-title">设置</span></div>
+        <div class="settings">
+          <div class="setting-group">
+            <div class="setting-label">模型</div>
+            <div class="model-list" id="modelList"></div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-label">界面风格</div>
+            <div class="select-box" id="themeSelect">
+              <button class="select-trigger" id="themeSelectTrigger" type="button">
+                <span id="themeSelectName">高级黑</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="select-menu" id="themeSelectMenu" hidden>
+                <button class="select-option" data-theme="premium-black" type="button">高级黑</button>
+                <button class="select-option" data-theme="frosted-glass" type="button">磨砂玻璃</button>
+                <button class="select-option" data-theme="dreamy-gradient" type="button">梦幻渐变</button>
+                <button class="select-option" data-theme="forest-green" type="button">清新自然</button>
+                <button class="select-option" data-theme="ice-jelly" type="button">冰态果冻</button>
+                <button class="select-option" data-theme="milk-tea" type="button">奶茶店</button>
+                <button class="select-option" data-theme="pixel" type="button">像素风</button>
+              </div>
+            </div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-label">UI 毛玻璃</div>
+            <div class="setting-row">
+              <span class="setting-name">界面深浅</span>
+              <span class="setting-value" id="glassValue">60%</span>
+            </div>
+            <input type="range" class="glass-range" id="glassRange" min="0" max="100" value="60" step="5">
+            <div class="setting-scale"><span>全透明</span><span>不透明</span></div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-label">背景毛玻璃</div>
+            <div class="setting-row">
+              <span class="setting-name">背景虚化</span>
+              <span class="setting-value" id="bgGlassValue">50%</span>
+            </div>
+            <input type="range" class="glass-range" id="bgGlassRange" min="0" max="100" value="50" step="5">
+            <div class="setting-scale"><span>清晰</span><span>强虚化</span></div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-label">鲸鱼娘背景</div>
+            <div class="setting-row">
+              <span class="setting-name">深海宫殿背景</span>
+              <label class="switch"><input type="checkbox" id="bgToggle" checked><span class="switch-slider"></span></label>
+            </div>
+            <div class="bg-presets" id="bgPresets">
+              <button class="bg-preset active" data-bg="auto">跟随主题</button>
+              <button class="bg-preset" data-bg="day">晨光宫殿</button>
+              <button class="bg-preset" data-bg="night">夜色宫殿</button>
+            </div>
+            <div class="setting-hint">背景素材取自「深海女仆工坊」鲸鱼娘皮肤（CC BY-NC-SA 4.0，仅个人使用）</div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-label">花边装饰</div>
+            <div class="setting-row">
+              <span class="setting-name">蕾丝纹样装饰</span>
+              <label class="switch"><input type="checkbox" id="flourishToggle" checked><span class="switch-slider"></span></label>
+            </div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-label">关于</div>
+            <div class="about-card">
+              手机工作媒介 · DeepSeek Harness<br>
+              通过 Zerotier 内外网均可用
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 新会话前：模式 + 模型选择器 -->
+    <div class="sheet-mask" id="setupMask" hidden></div>
+    <div class="setup-sheet" id="setupSheet" hidden>
+      <div class="setup-head">
+        <span class="setup-title">开始新对话</span>
+        <button class="icon-btn setup-close" id="setupClose" aria-label="关闭" title="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="setup-body">
+        <div class="setup-label">模式</div>
+        <div class="mode-row" id="modeRow">
+          <button class="mode-chip active" data-mode="chat" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l2.2-3.7A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+            <span>普通对话</span>
+          </button>
+          <button class="mode-chip" data-mode="plan" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>计划模式</span>
+          </button>
+        </div>
+        <div class="setup-label">模型</div>
+        <div class="setup-models" id="setupModels"></div>
+      </div>
+      <div class="setup-foot">
+        <button class="setup-cancel" id="setupCancel" type="button">取消</button>
+        <button class="setup-start" id="setupStart" type="button" disabled>开始对话</button>
+      </div>
+    </div>
+
+    <!-- 新会话二次确认 -->
+    <div class="confirm-mask" id="confirmMask" hidden></div>
+    <div class="confirm-dialog" id="confirmDialog" hidden>
+      <div class="confirm-icon">🐳</div>
+      <div class="confirm-title">要开新对话吗？</div>
+      <div class="confirm-desc">旧对话我不会乱丢，会好好收在历史里～确定现在就开新的吗？</div>
+      <div class="confirm-actions">
+        <button class="confirm-cancel" id="confirmCancel" type="button">再想想</button>
+        <button class="confirm-ok" id="confirmOk" type="button">开新哒！</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=20260818c"></script>
+</body>
+</html>

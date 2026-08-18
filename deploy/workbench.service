@@ -1,0 +1,24 @@
+[Unit]
+Description=Mobile Workbench Bridge (DeepSeek Harness 手机工作媒介)
+After=network-online.target dsh-web.service
+Wants=network-online.target dsh-web.service
+
+[Service]
+Type=simple
+User=YOUR_USER
+Group=YOUR_USER
+WorkingDirectory=/path/to/手机工作媒介/bridge
+Environment=HOME=/home/YOUR_USER
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+# 内外网访问：HOST=0.0.0.0（Zerotier 网卡可达），由访问口令保护 /api/*
+Environment=WORKBENCH_HOST=0.0.0.0
+Environment=WORKBENCH_PORT=8090
+Environment=WORKBENCH_DSH_BASE=http://127.0.0.1:3080
+Environment=WORKBENCH_WORK_DIRS=/path/to/工作目录
+Environment=WORKBENCH_ACCESS_TOKEN=YOUR_ACCESS_TOKEN
+ExecStart=/usr/local/bin/node --max-old-space-size=512 server.mjs
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
