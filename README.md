@@ -18,6 +18,12 @@
 
 > 💡 主题在右上角或设置面板中一键切换，偏好自动保存。
 
+### 🖼️ 功能界面
+
+| 抽屉导航 | 设置面板 | 桌面全景 |
+|:---:|:---:|:---:|
+| ![抽屉导航](mobile/assets/screenshots/feature-drawer.png) | ![设置面板](mobile/assets/screenshots/feature-settings.png) | ![桌面全景](mobile/assets/screenshots/feature-desktop.png) |
+
 ---
 
 ## ✨ 特色功能
